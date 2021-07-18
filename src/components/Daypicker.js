@@ -1,35 +1,25 @@
-import React from "react";
+import { useState, useEffect } from 'react';
+import DatePicker from 'react-date-picker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const Daypicker = props => {
-    return (
-        <select className="day-picker-select" onChange={props.dayPickerHandler}>
-            <option value="0">
-                Today
-                {/* {props.state.weather[0].FCTTIME.mon_abbrev}{" "}
-        {props.state.weather[0].FCTTIME.mday} */}
-            </option>
-            <option value="1">
-                Tomorrow
-                {/* {props.state.weather[24].FCTTIME.mon_abbrev}{" "}
-        {props.state.weather[24].FCTTIME.mday} */}
-            </option>
-            <option value="2">
-                Day 3
-                {/* {props.state.weather[48].FCTTIME.mon_abbrev}{" "}
-        {props.state.weather[48].FCTTIME.mday} */}
-            </option>
-            <option value="3">
-                Day 4
-                {/* {props.state.weather[72].FCTTIME.mon_abbrev}{" "}
-        {props.state.weather[72].FCTTIME.mday} */}
-            </option>
-            <option value="4">
-                Day 5
-                {/* {props.state.weather[96].FCTTIME.mon_abbrev}{" "}
-        {props.state.weather[96].FCTTIME.mday} */}
-            </option>
-        </select>
-    );
+  const [finalDay, setFinalDay] = useState(new Date());
+
+  useEffect(() => {
+    const today = new Date();
+    const fiveDaysAway = new Date();
+    fiveDaysAway.setDate(today.getDate() + 4);
+    setFinalDay(fiveDaysAway);
+  }, []);
+
+  return (
+    <DatePicker
+      value={props.selectedDate}
+      onChange={props.setSelectedDate}
+      minDate={new Date()}
+      maxDate={finalDay}
+    />
+  );
 };
 
 export default Daypicker;
