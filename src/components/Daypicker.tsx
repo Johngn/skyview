@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import DatePicker from 'react-date-picker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const Daypicker = props => {
+export interface DaypickerProps {
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+const Daypicker = ({ selectedDate, setSelectedDate }: DaypickerProps) => {
   const [finalDay, setFinalDay] = useState(new Date());
 
   useEffect(() => {
@@ -14,8 +19,8 @@ const Daypicker = props => {
 
   return (
     <DatePicker
-      value={props.selectedDate}
-      onChange={props.setSelectedDate}
+      value={selectedDate}
+      onChange={setSelectedDate}
       minDate={new Date()}
       maxDate={finalDay}
     />

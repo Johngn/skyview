@@ -1,34 +1,40 @@
-import { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 
-const Chart = props => {
-  useEffect(() => {
-    props.chartData.weather &&
-      console.log(props.chartData.weather[0].main.temp);
-  });
+export interface chartDataProps {
+  forecastTimes: string[];
+  cloudArray: string[];
+  humidityArray: string[];
+  windArray: string[];
+}
 
+const Chart = ({
+  forecastTimes,
+  cloudArray,
+  humidityArray,
+  windArray,
+}: chartDataProps) => {
   return (
     <div className="chart">
       <Line
         data={{
-          labels: props.chartData.forecastTimes,
+          labels: forecastTimes,
           datasets: [
             {
               pointRadius: 0,
               label: 'Cloud cover (%)',
-              data: props.chartData.cloudArray,
+              data: cloudArray,
               borderColor: 'red',
             },
             {
               pointRadius: 0,
               label: 'Humidity (%)',
-              data: props.chartData.humidityArray,
+              data: humidityArray,
               borderColor: 'rgb(255, 100, 0)',
             },
             {
               pointRadius: 0,
               label: 'Wind speed (km/hr)',
-              data: props.chartData.windArray,
+              data: windArray,
               borderColor: 'rgb(255, 0, 225)',
             },
           ],
