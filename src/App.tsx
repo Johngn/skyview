@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+
+import AutoCompleteContainer from './components/AutoCompleteContainer';
 import Chart from './components/Chart';
 import Daypicker from './components/Daypicker';
-import AutoCompleteContainer from './components/AutoCompleteContainer';
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import LoadingSpinner from './components/LoadingSpinner';
+import ErrorModal from './components/ErrorModal';
+import StyledContainer from './components/StyledContainer';
+import Introduction from './components/Introduction';
+
 import './App.css';
 import './datepickercustomstyles.css';
 
 const App = () => {
-  const [address, setAddress] = useState('');
+  const [enteredAddress, setEnteredAddress] = useState('');
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
 
@@ -19,9 +25,10 @@ const App = () => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (address.length > 10) {
+    if (enteredAddress.length > 10) {
       setLoading(true);
       axios
         .get(
@@ -29,8 +36,6 @@ const App = () => {
         )
         .then(response => {
           selectedDate.setHours(23, 0, 0, 0);
-
-          console.log(response.data.list);
 
           const weatherTonight = response.data.list.filter(
             (weathersingle: any) => {
@@ -49,62 +54,71 @@ const App = () => {
           setCloudArray(weatherTonight.map((hr: any) => hr.clouds.all));
           setHumidityArray(weatherTonight.map((hr: any) => hr.main.humidity));
           setWindArray(weatherTonight.map((hr: any) => hr.wind.speed));
+
+          setLoading(false);
         })
         .catch(error => {
-          console.log(error);
+          setError(error.message);
+          setLoading(false);
         });
-      setLoading(false);
+
+      return setLoading(true);
     }
   }, [lat, lng, selectedDate]);
 
   const onAddressChangeHandler = (enteredAddress: string) => {
-    setAddress(enteredAddress);
+    setEnteredAddress(enteredAddress);
   };
 
   const onAddressSelectHandler = () => {
-    geocodeByAddress(address)
+    geocodeByAddress(enteredAddress)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         setLat(latLng.lat);
         setLng(latLng.lng);
       })
-      .catch(error => console.error('Error', error));
+      .catch(error => {
+        setError(error.message);
+      });
   };
 
   const inputProps = {
-    value: address,
+    value: enteredAddress,
     placeholder: 'Search Location',
     onChange: onAddressChangeHandler,
     onSelect: onAddressSelectHandler,
+    autoFocus: true,
+  };
+
+  const clearError = () => {
+    setError(null);
   };
 
   return (
-    <main>
-      <form className="searchform">
-        <AutoCompleteContainer inputProps={inputProps} />
-        <Daypicker
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-        />
-      </form>
-      {address.length > 10 && !loading && (
-        <Chart
-          forecastTimes={forecastTimes}
-          cloudArray={cloudArray}
-          humidityArray={humidityArray}
-          windArray={windArray}
-        />
-      )}
-      {loading && (
-        <div>
-          <h1
-            style={{ textAlign: 'center', color: 'white', marginTop: '100px' }}
-          >
-            Loading...
-          </h1>
-        </div>
-      )}
-    </main>
+    <>
+      {error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+      {loading && <LoadingSpinner />}
+
+      <StyledContainer>
+        <Introduction />
+        <form className="searchform">
+          <div style={{ width: '60%' }}>
+            <AutoCompleteContainer inputProps={inputProps} />
+          </div>
+          <Daypicker
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
+        </form>
+      </StyledContainer>
+
+      <Chart
+        forecastTimes={forecastTimes}
+        cloudArray={cloudArray}
+        humidityArray={humidityArray}
+        windArray={windArray}
+      />
+    </>
   );
 };
 
