@@ -1,27 +1,6 @@
 
 
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-  </ol>
-</details>
-
-
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -43,13 +22,7 @@ This project was built with.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Follow these steps to get started
-
-### Prerequisites
-
-  
-
-### Installation
+SkyView is a frontend only application. It is a React app and therefore can be cloned and then installed with ```npm i```
 
 
 
