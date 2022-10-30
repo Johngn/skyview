@@ -13,7 +13,7 @@
 
 body {
   background: var(--two);
-  /* background-image: url('./img/space1.jpg'); */
+  background-image: url('./img/space1.jpg');
   background-repeat: no-repeat;
   background-size: 2000px;
 }
@@ -54,13 +54,13 @@ body {
 /* RESULTS */
 
 .chart {
-  padding: 20px;
+  /* padding: 20px; */
   border: 1px solid black;
   border-radius: 5px;
-  max-width: 100%;
-  width: 800px;
+  /* max-width: 100%; */
+  max-width: 1000px;
   margin: 20px auto;
-  background-color: rgb(51, 58, 83);
+  background-color: rgba(51, 58, 83, 0.7);
   box-shadow: 1px 1px 5px black;
 }
 
